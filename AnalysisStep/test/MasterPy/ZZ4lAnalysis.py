@@ -84,6 +84,8 @@ MUISOCUT = "0.4"
 ### ----------------------------------------------------------------------
 ### Set the GT
 ### ----------------------------------------------------------------------
+process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+process.options.allowUnscheduled = cms.untracked.bool(True)
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 
 if (SAMPLE_TYPE == 2011) :
@@ -119,8 +121,16 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.load("Configuration.StandardSequences.GeometryDB_cff")
 process.load("Configuration.StandardSequences.MagneticField_38T_cff")
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
-process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+#process.load("Configuration.EventContent.EventContent_cff")
+#process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
+#process.load('Configuration.StandardSequences.Services_cff')
+#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
+process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+##puppi module
+from JMEAnalysis.JetToolbox.jetToolbox_cff import *
+jetToolbox( process, 'ak4', 'ak4JetSubs', 'out', PUMethod='Puppi', JETCorrLevels = ['L1FastJet', 'L2Relative', 'L3Absolute'] ) 
+process.epath=cms.EndPath(process.out)
 
 ### ----------------------------------------------------------------------
 ### Source
@@ -891,6 +901,7 @@ if (UPDATE_JETS and LEPTON_SETUP==2012) :
 #    from CMGTools.Common.miscProducers.cmgPFJetCorrector_cfi import cmgPFJetCorrector
     process.cmgPFJetSel = cms.EDProducer( "PFJetCorrector",
                                         # make sure your jet and rho collections are compatible
+#                                        src = cms.InputTag( 'selectedPatJetsAK4PFPuppi' ),
                                         src = cms.InputTag( 'slimmedJets' ),
                                         rho = cms.InputTag( 'kt6PFJets:rho:RECO' ),
                                         vertices = cms.InputTag('offlinePrimaryVertices'),
@@ -906,10 +917,13 @@ if (UPDATE_JETS and LEPTON_SETUP==2012) :
 
 # embed q/g likelihood
 process.load('RecoJets.JetProducers.QGTagger_cfi')
+#process.QGTagger.srcJets = cms.InputTag( 'selectedPatJetsAK4PFPuppi' )
 process.QGTagger.srcJets = cms.InputTag( 'slimmedJets' )
+
 process.QGTagger.jetsLabel = cms.string('QGL_AK4PFchs')
 
 process.dressedJets = cms.EDProducer("JetFiller",
+#    src = cms.InputTag("selectedPatJetsAK4PFPuppi"),
     src = cms.InputTag("slimmedJets"),
     cut = cms.string("pt>20 && abs(eta)<4.7"),
     flags = cms.PSet(
