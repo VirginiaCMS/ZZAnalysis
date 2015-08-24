@@ -1,4 +1,4 @@
-#!/bin/tcsh -fe
+#!/bin/bash
 #
 # Instructions:
 # wget -P /tmp https://raw.githubusercontent.com/CJLST/ZZAnalysis/miniAOD_74X/checkout_70X.csh
@@ -7,16 +7,17 @@
 # source /tmp/checkout_70X.csh
 
 
-############## For miniAOD/CMSSW_7_4_5
+############## For miniAOD/CMSSW_7_4_7
 
 # init git env.
 git cms-init
 
 #electron MVA ID (still with Phys14 training)
-#git cms-merge-topic sregnard:Phys14ElectronMvaIdFor745
+git cms-merge-topic sregnard:Phys14ElectronMvaIdFor745
 
-# put EID and PUPPI together
-git cms-merge-topic VirginiaCMS:merge-puppi-Phys14ElectronMvaIdFor745
+# add Puppi
+git cms-addpkg CommonTools/PileupAlgos
+git cms-merge-topic nhanvtran:puppi-etadep-746p2-v8
 
 #ZZAnalysis
 git clone https://github.com/VirginiaCMS/ZZAnalysis.git ZZAnalysis
