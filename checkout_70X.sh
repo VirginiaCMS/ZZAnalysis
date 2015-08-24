@@ -19,6 +19,9 @@ git cms-merge-topic sregnard:Phys14ElectronMvaIdFor745
 git cms-addpkg CommonTools/PileupAlgos
 git cms-merge-topic nhanvtran:puppi-etadep-746p2-v8
 
+# add jet toolbox
+git clone git@github.com:cms-jet/JetToolbox.git JMEAnalysis/JetToolbox -b jetToolbox_74X
+
 #ZZAnalysis
 git clone https://github.com/VirginiaCMS/ZZAnalysis.git ZZAnalysis
 (cd ZZAnalysis; git checkout miniAOD_74X_puppi)
@@ -46,7 +49,7 @@ git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsA
 git clone -n https://github.com/VBF-HZZ/UFHZZAnalysisRun2
 (cd UFHZZAnalysisRun2 ; git checkout origin/csa14 FSRPhotons) #This does not set the correct branch, but picks the right one anyway
 
-
+scram b -j 5
 #Jet energy corrections (CMGTools)
 #(mkdir -p CMGTools/Common; cd CMGTools/Common ; wget https://raw.githubusercontent.com/CERN-PH-CMG/cmg-cmssw/a875832047532c5469aa9795751f0363cd5d9244/CMGTools/Common/plugins/JetEnergyCorrector.h)
 
