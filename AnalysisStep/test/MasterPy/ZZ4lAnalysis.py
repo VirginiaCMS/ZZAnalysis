@@ -126,11 +126,6 @@ process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 #process.GlobalTag.globaltag = 'MCRUN2_74_V7'
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
-##puppi module
-#from JMEAnalysis.JetToolbox.jetToolbox_cff import *
-#jetToolbox( process, 'ak4', 'ak4JetSubs', 'out', PUMethod='Puppi', JETCorrLevels = ['L1FastJet', 'L2Relative', 'L3Absolute'] ) 
-#process.epath=cms.EndPath(process.out)
-
 ### ----------------------------------------------------------------------
 ### Source
 ### ----------------------------------------------------------------------

@@ -112,6 +112,24 @@ process.trees = cms.EndPath(process.ZZTree)
 from FWCore.ParameterSet.Utilities import convertToUnscheduled
 convertToUnscheduled(process)
 
+process.load("CondCore.DBCommon.CondDBCommon_cfi")
+process.jec = cms.ESSource("PoolDBESSource",
+                           DBParameters = cms.PSet(
+        messageLevel = cms.untracked.int32(0)
+        ),
+                           timetype = cms.string('runnumber'),
+                           toGet = cms.VPSet(            
+        cms.PSet(
+            record = cms.string('JetCorrectionsRecord'),
+            #tag    = cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK4PFPuppi'),
+            tag    = cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_MC_AK4PFPuppi'),
+            label  = cms.untracked.string('AK4PFPuppi')
+            ),
+        ),
+                           connect = cms.string('sqlite:Summer15_50nsV5_MC.db')
+                           )
+process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
+
 from JMEAnalysis.JetToolbox.jetToolbox_cff import *
-jetToolbox( process, 'ak4', 'ak4JetSubs', 'out', PUMethod='Puppi',JETCorrPayload='AK4PFPUPPI', JETCorrLevels = ['L1FastJet', 'L2Relative', 'L3Absolute'] ) 
-#process.epath=cms.EndPath(process.out)
+jetToolbox( process, 'ak4', 'ak4JetSubs', 'out', PUMethod='Puppi',JETCorrPayload='AK4PFPuppi', JETCorrLevels = ['L1FastJet', 'L2Relative', 'L3Absolute'] )
+
