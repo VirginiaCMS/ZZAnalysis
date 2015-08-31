@@ -1,11 +1,12 @@
 from ROOT import *
 from sys import argv
-if len(argv)!=3:
+if len(argv)<3:
     print 'wrong argv'
     exit()
-#pufile=TFile('/afs/cern.ch/user/y/yanchu/work/puppi/CMSSW_7_4_7/src/JMEAnalysis/JetToolbox/test/testJTB.root')
-#puHi=pufile.Get('hJetsPt')
-#n=int(300/puHi.GetXaxis().GetBinWidth(0))
+if len(argv)<4:
+    etacut=4.7
+else:
+    etacut=float(argv[3])
 zztree=TChain('ZZTree/candTree')
 zznptree=TChain('ZZTree/candTree')
 zztree.Add(argv[1])
@@ -20,12 +21,14 @@ while zztree.GetEntry(i):
     i+=1
     jeteta=zztree.JetEta
     for a in jeteta:
+        if a>etacut or a<-etacut:continue
         etaHi.Fill(a)
 i=0
 while zznptree.GetEntry(i):
     i+=1
     jeteta=zznptree.JetEta
     for a in jeteta:
+        if a>etacut or a<-etacut:continue
         etaHinp.Fill(a)
 #puHi.GetXaxis().SetRange(0,300)
 #puHi.Draw()
@@ -33,8 +36,13 @@ while zznptree.GetEntry(i):
 #puHi.SetLineColor(2)
 etaHinp.SetLineColor(3)
 c.cd(1)
+a=etaHinp.GetMaximum()
+if a<etaHi.GetMaximum():
+    a=etaHi.GetMaximum()
+a=a*1.1
 etaHinp.Draw()
 etaHinp.SetTitle('Eta Distribution;Eta;event')
+etaHinp.SetMaximum(a)
 etaHi.Draw('same')
 
 etaHinp1=etaHinp.Clone()

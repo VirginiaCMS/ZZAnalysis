@@ -1,11 +1,13 @@
 from ROOT import *
 from sys import argv
-if len(argv)!=3:
+if len(argv)<3:
     print 'wrong argv'
     exit()
-#pufile=TFile('/afs/cern.ch/user/y/yanchu/work/puppi/CMSSW_7_4_7/src/JMEAnalysis/JetToolbox/test/testJTB.root')
-#puHi=pufile.Get('hJetsPt')
-#n=int(300/puHi.GetXaxis().GetBinWidth(0))
+if len(argv)<4:
+    etacut=4.7
+else:
+    etacut=float(argv[3])
+
 zztree=TChain('ZZTree/candTree')
 zznptree=TChain('ZZTree/candTree')
 
@@ -20,19 +22,21 @@ ptHinp=TH1F("jetptnp","Jet_pt",n,0,300)
 while zztree.GetEntry(i):
     i+=1
     jetpt=zztree.JetPt
-    for a in jetpt:
-        ptHi.Fill(a)
+    jeteta=zztree.JetEta
+    for ii in range(len(jetpt)):
+        a=jeteta[ii]
+        if a>etacut or a<-etacut:continue
+        ptHi.Fill(jetpt[ii])
 i=0
 while zznptree.GetEntry(i):
     i+=1
     jetpt=zznptree.JetPt
-    for a in jetpt:
-        ptHinp.Fill(a)
-#puHi.GetXaxis().SetRange(0,300)
-#puHi.Draw()
+    jeteta=zznptree.JetEta
+    for ii in range(len(jetpt)):
+        a=jeteta[ii]
+        if a>etacut or a<-etacut:continue
+        ptHinp.Fill(jetpt[ii])
 
-#ptHi.Scale(puHi.GetMaximum()/ptHi.GetMaximum())
-#puHi.SetLineColor(2)
 ptHinp.SetLineColor(3)
 c.cd(1)
 ptHinp.Draw()
